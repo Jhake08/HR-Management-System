@@ -65,7 +65,9 @@ export class GoogleOAuth {
       })
 
       if (!response.ok) {
-        throw new Error(`OAuth token exchange failed: ${response.status}`)
+        const errorBody = await response.text();
+        console.error("OAuth token exchange failed response body:", errorBody);
+        throw new Error(`OAuth token exchange failed: ${response.status} - ${errorBody}`)
       }
 
       const tokens = await response.json()
