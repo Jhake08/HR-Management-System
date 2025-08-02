@@ -295,7 +295,6 @@ export function OAuthSetup() {
                 placeholder="123456789-abcdefghijklmnop.apps.googleusercontent.com"
                 value={config.clientId}
                 onChange={(e) => setConfig((prev) => ({ ...prev, clientId: e.target.value }))}
-                disabled={isConfigured}
               />
             </div>
 
@@ -303,34 +302,30 @@ export function OAuthSetup() {
               <Label htmlFor="clientSecret">Client Secret</Label>
               <div className="relative">
                 <Input
-                  id="clientSecret"
-                  type={showClientSecret ? "text" : "password"}
-                  placeholder="GOCSPX-abcdefghijklmnopqrstuvwxyz"
-                  value={config.clientSecret}
-                  onChange={(e) => setConfig((prev) => ({ ...prev, clientSecret: e.target.value }))}
-                  disabled={isConfigured}
-                  className="pr-10"
-                />
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                  onClick={() => setShowClientSecret(!showClientSecret)}
-                  disabled={isConfigured}
-                >
+                id="clientSecret"
+                type={showClientSecret ? "text" : "password"}
+                placeholder="GOCSPX-abcdefghijklmnopqrstuvwxyz"
+                value={config.clientSecret}
+                onChange={(e) => setConfig((prev) => ({ ...prev, clientSecret: e.target.value }))}
+                className="pr-10"
+              />
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                onClick={() => setShowClientSecret(!showClientSecret)}
+              >
                   {showClientSecret ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </Button>
               </div>
             </div>
           </div>
 
-          {!isConfigured && (
-            <Button onClick={handleSaveCredentials} className="w-full">
-              <Key className="w-4 h-4 mr-2" />
-              Save OAuth Credentials
-            </Button>
-          )}
+          <Button onClick={handleSaveCredentials} className="w-full">
+            <Key className="w-4 h-4 mr-2" />
+            Save OAuth Credentials
+          </Button>
 
           {isConfigured && (
             <Alert className="border-green-200 bg-green-50">
