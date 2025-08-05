@@ -53,16 +53,32 @@ export function OAuthSetup() {
     }
   }, [])
 
-  const handleSaveCredentials = () => {
+  const handleSaveCredentials = async () => {
     if (!config.clientId.trim() || !config.clientSecret.trim()) {
       showNotification("Please fill in all required fields", "error")
       return
     }
 
     try {
-      // Save configuration
+      // Save configuration locally
       localStorage.setItem("oauth_config", JSON.stringify(config))
       localStorage.setItem("oauth_configured", "true")
+
+      // Update environment variables via API
+      const response = await fetch("/api/update-env", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          clientId: config.clientId,
+          clientSecret: config.clientSecret,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to update environment variables")
+      }
 
       setIsConfigured(true)
       showNotification("OAuth credentials saved successfully!", "success")
@@ -72,7 +88,7 @@ export function OAuthSetup() {
       window.dispatchEvent(new CustomEvent("oauth-status-changed"))
     } catch (error) {
       console.error("Error saving OAuth config:", error)
-      showNotification("Failed to save OAuth credentials", "error")
+      showNotification(error instanceof Error ? error.message : "Failed to save OAuth credentials", "error")
     }
   }
 
